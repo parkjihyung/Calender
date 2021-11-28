@@ -21,6 +21,7 @@
 | Id            | Name          | Type     | Lengh |
 | ------------- | ------------- | -------- | ----- |
 | email         | 이메일        | Text     | 100   |
+| name          | 이름          | Text     | 100   |
 | password      | 비밀번호      | Text     | 100   |
 | register_date | 가입일자      | DateTime |       |
 
