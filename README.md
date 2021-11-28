@@ -20,10 +20,8 @@
 
 | Id            | Name          | Type     | Lengh |
 | ------------- | ------------- | -------- | ----- |
-| id            | 사용자 아이디 | Text     | 30    |
-| name          | 사용자 명     | Text     | 100   |
-| password      | 비밀번호      | Text     | 30    |
 | email         | 이메일        | Text     | 100   |
+| password      | 비밀번호      | Text     | 100   |
 | register_date | 가입일자      | DateTime |       |
 
 
