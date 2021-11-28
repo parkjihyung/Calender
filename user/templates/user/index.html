@@ -1,3 +1,28 @@
 <!-- Index Page -->
 <!-- 로그인이 되어 있지 않으면 로그인 페이지를, 로그인 되어 있으면 캘린더가 보인다. -->
 <!-- 로그인 페이지 상단에는 로그인 정보가 보여야 한다. (이름(이메일주소) : logout)-->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        .login {
+            width: 500px;
+            margin: 200px auto auto auto;
+            text-align: center;
+}
+    </style>
+</head>
+<body>
+    <div class = "login">
+        <h1 class = "title">로그인 페이지</h1>
+        <hr>
+        <p class = "id">ID: <input type="text" /></p>
+        <p class = "pw">PW: <input type="text" /></p>
+        <p class = "button"><button>로그인</button></p>
+        <hr>
+    </div>
+</body>
+</html>
