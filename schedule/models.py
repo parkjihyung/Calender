@@ -28,7 +28,6 @@ from django.utils import timezone
 
 class Calendar(models.Model):
     title = models.CharField(max_length=100)
-    description = models.CharField(max_length=1000)
     start = models.DateTimeField('Start Date')
     end = models.DateTimeField('End Date')
     allDay = models.BooleanField(default=True)

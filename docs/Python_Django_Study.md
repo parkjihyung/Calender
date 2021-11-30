@@ -263,9 +263,10 @@ Not Found: /favicon.ico
 
 
 
-### 6. Django Admin 걔정 생성하기
+### 6. Django Admin 계정 생성하기
 
 ```shell
+(myfriend) E:\Python_Workspace\myfriend\workspace\mysite>python manage.py makemigrations
 (myfriend) E:\Python_Workspace\myfriend\workspace\mysite>python manage.py migrate
 Operations to perform:
   Apply all migrations: admin, auth, contenttypes, sessions

@@ -6,7 +6,7 @@
   <meta charset='utf-8' />
   <link href="{% static '/schedule/lib/fullcalendar-5.10.1/main.css' %}" rel='stylesheet' />
   <script src="{% static '/schedule/lib/fullcalendar-5.10.1/main.js' %}"></script>
-
+  <script src="{% static '/schedule/lib/util.js' %}"></script>
   <script>
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -23,20 +23,31 @@
         navLinks: true, // can click day/week names to navigate views
         dayMaxEvents: true, // allow "more" link when too many events
         selectable: true,
-        select: function (selectionInfo) {
-          var inputString = prompt("이벤트 명을 입력해주세요.");
+        select: function (event) {
+          let inputString = prompt("등록할 스케쥴 제목을 입력해주세요.");
           if ((inputString != null) && (inputString != "")) {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                  alert(xhttp.responseText);
-
-                  calendar.addEvent({ title: inputString, start: selectionInfo.startStr, end: selectionInfo.endStr });
+                  calendar.addEvent({ title: inputString, start: event.startStr, end: event.endStr });
                 }
             };
-            xhttp.open("POST", '/schedule/set_all_day_event/', true);
-            xhttp.send(JSON.stringify({ title: inputString, start: selectionInfo.startStr, end: selectionInfo.endStr }));
+
+            xhr.open("POST", '/schedule/set_all_day_event/');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+            xhr.send(JSON.stringify({ title: inputString, start: event.startStr, end: event.endStr, allDay: event.allDay }));
           }
+        },
+        eventClick: function(event) { 
+          var eventId = event.event._def.publicId;
+          /*
+          windowObjectReference = window.open(
+            "http://www.domainname.ext/path/ImageFile.png",
+            "DescriptiveWindowName",
+            "left=100,top=100,width=320,height=320"
+          );
+          */
         },
         events: {
           url: '/schedule/get_events/',

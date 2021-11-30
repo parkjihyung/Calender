@@ -2,6 +2,7 @@ from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirec
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from datetime import date
+import json
 
 from .models import Calendar
 
@@ -16,9 +17,10 @@ def get_events(request):
     return JsonResponse(data, safe = False)
 
 def set_all_day_event(request):
-    Calendar(title='title', start='', end='', allDay=True)
-    ##p = Calendar(title='title', start='', end='', allDay=True)
-    ##p.save()
+    data =  json.loads(request.body.decode('utf-8'))
+    calendar = Calendar(title = data['title'], start = data['start'], end = data['end'], allDay = data['allDay'])
+    calendar.save()
+    return JsonResponse({"result" : "success"}, safe = False)
 
 '''
 def index(request):
