@@ -23,13 +23,15 @@
         navLinks: true, // can click day/week names to navigate views
         dayMaxEvents: true, // allow "more" link when too many events
         selectable: true,
+
+        // 이벤트 기간을 드래그해서 선택한 후에 이벤트 정보를 등록합니다.
         select: function (event) {
           let inputString = prompt("등록할 스케쥴 제목을 입력해주세요.");
           if ((inputString != null) && (inputString != "")) {
             const xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
-                  calendar.addEvent({ title: inputString, start: event.startStr, end: event.endStr });
+                  window.document.location.reload();
                 }
             };
 
@@ -39,16 +41,29 @@
             xhr.send(JSON.stringify({ title: inputString, start: event.startStr, end: event.endStr, allDay: event.allDay }));
           }
         },
-        eventClick: function(event) { 
-          var eventId = event.event._def.publicId;
-          /*
-          windowObjectReference = window.open(
-            "http://www.domainname.ext/path/ImageFile.png",
-            "DescriptiveWindowName",
-            "left=100,top=100,width=320,height=320"
+
+        // 특정 이벤트를 클릭합니다.
+        eventClick: function(event) {
+          const eventId = event.event._def.publicId;
+          const eventName = event.event._def.title;
+
+          const eventWindow = window.open(
+            "/admin/schedule/calendar/" + eventId + "/change/",
+            eventName,
+            "left=100,top=100,width=780,height=670"
           );
-          */
+
+          eventWindow.addEventListener("beforeunload", function(event) {
+            // 현재 화면을 새로고침한다.
+            window.document.location.reload();
+          });
+
+          setTimeout(() => {
+            eventWindow.document.getElementById("header").style.display = "none";
+          }, 500);
+ 
         },
+        // 화면에 보여줄 이벤트 정보를 요청합니다.
         events: {
           url: '/schedule/get_events/',
           failure: function () {
