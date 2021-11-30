@@ -267,6 +267,9 @@ Not Found: /favicon.ico
 
 ```shell
 (myfriend) E:\Python_Workspace\myfriend\workspace\mysite>python manage.py makemigrations
+
+python manage.py migrate --fake-initial  
+
 (myfriend) E:\Python_Workspace\myfriend\workspace\mysite>python manage.py migrate
 Operations to perform:
   Apply all migrations: admin, auth, contenttypes, sessions

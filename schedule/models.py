@@ -25,8 +25,8 @@ from django.utils import timezone
 # >>> q.id
 # >>> Question.objects.get(id=1)
 
-
 class Calendar(models.Model):
+    userId = models.IntegerField(default=0)
     title = models.CharField(max_length=100)
     start = models.DateTimeField('Start Date')
     end = models.DateTimeField('End Date')

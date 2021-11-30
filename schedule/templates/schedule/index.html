@@ -29,9 +29,12 @@
           let inputString = prompt("등록할 스케쥴 제목을 입력해주세요.");
           if ((inputString != null) && (inputString != "")) {
             const xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
+            xhr.onreadystatechange = function() { 
                 if (this.readyState == 4 && this.status == 200) {
-                  window.document.location.reload();
+                  const res = JSON.parse(this.responseText);
+                  if ((res.result == "success") && (res.eventId != null) && (res.eventId != "")) { 
+                    calendar.addEvent({ id : res.eventId, title: inputString, start: event.startStr, end: event.endStr });
+                  }
                 }
             };
 
@@ -61,7 +64,8 @@
           setTimeout(() => {
             eventWindow.document.getElementById("header").style.display = "none";
           }, 500);
- 
+
+          
         },
         // 화면에 보여줄 이벤트 정보를 요청합니다.
         events: {
