@@ -31,12 +31,11 @@
 
 | Id          | Name            | Type     | Lengh |
 | ----------- | --------------- | -------- | ----- |
-| user_id     | 사용자 아이디   | Text     | 30    |
+| userId     | 사용자 아이디   | Number     |     |
 | title       | 스케쥴 제목     | Text     | 100   |
-| description | 스케쥴 상세설명 | Text     | 1000  |
-| start_date  | 시작일시        | DateTime |       |
-| end_date    | 종료일시        | DateTime |       |
-| all_day     | 종일 여부       | Boolean  |       |
+| start  | 시작일시        | DateTime |       |
+| end   | 종료일시        | DateTime |       |
+| allDay     | 종일 여부       | Boolean  |       |
 
 
 

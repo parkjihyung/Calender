@@ -1,58 +1,45 @@
 from django.http import Http404, HttpResponse, JsonResponse, HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from datetime import date
 import json
 
 from .models import Calendar
 
+# 최초 인덱스 페이지 (로그인이 된 경우에는 Schedule 페이지로 이동하고, 로그인이 되어 있지 않는 경우 로그인 페이지로 이동함)
 def index(request):
     today = date.today()
+    # 오늘 날짜를 구함
     context = { 'today_ymd' : today.strftime('%Y-%m-%d') }
-    return render(request, 'schedule/index.html', context)
+    if (request.user.id != None) :
+        # index.html 페이지를 렌더링하도록 요청함
+        return render(request, 'schedule/index.html', context)
+    else :
+        # 로그인이 되어 있지 않기 때문에 로그인 페이지로 이동시킴
+        return redirect('/admin/login/?next=/schedule/')
 
+# 현재 로그인된 사용자의 최근 등록된 이벤트 정보를 요청함
 def get_events(request):
-    #data = list(Calendar.objects.filter(start >= request['start'], end <= request['end']).values())
-    data = list(Calendar.objects.filter(start__gte = request.GET['start'][0:10], end__lte = request.GET['end'][0:10]).values())
-    return JsonResponse(data, safe = False)
-
-def set_all_day_event(request):
-    data =  json.loads(request.body.decode('utf-8'))
-    calendar = Calendar(title = data['title'], start = data['start'], end = data['end'], allDay = data['allDay'])
-    calendar.save()
-    return JsonResponse({"result" : "success"}, safe = False)
-
-'''
-def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    context = {'latest_question_list': latest_question_list}
-    return render(request, 'polls/index.html', context)
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
-    # try:
-    #     question = Question.objects.get(pk=question_id)
-    # except Question.DoesNotExist:
-    #     raise Http404("Question does not exist")
-    # return render(request, 'polls/detail.html', {'question': question})
-def results(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/results.html', {'question': question})
-def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    try:
-        selected_choice = question.choice_set.get(pk=request.POST['choice'])
-    except (KeyError, Choice.DoesNotExist):
-        # Redisplay the question voting form.
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
+    if (request.user.id != None):
+        # 현재 로그인된 사용자의 화면에서 요청한 시작일자(start), 종료일자(end)에 대한 이벤트 정보를 읽어서 반환한다.
+        data = list(Calendar.objects.filter(userId = request.user.id, start__gte = request.GET['start'][0:10], end__lte = request.GET['end'][0:10]).values()) 
+        # 가져온 Calendar 데이터를 JSON 포맷으로 화면에 전달함
+        return JsonResponse(data, safe = False)
     else:
-        selected_choice.vote += 1
-        selected_choice.save()
-        # Always return an HttpResponseRedirect after successfully dealing
-        # with POST data. This prevents data from being posted twice if a
-        # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
-'''
+        # 로그인이 되어 있지 않기 때문에 로그인 페이지로 이동시킴
+        return redirect('/admin/login/?next=/schedule/')
+
+# 새로운 이벤트 정보를 등록함
+def set_all_day_event(request):
+    if (request.user.id != None):
+        # 화면에서 전달한 새로운 이벤트 JSON 데이터를 로딩함
+        data =  json.loads(request.body.decode('utf-8'))
+        # Calendar Model에 화면에서 전달한 이벤트 정보를 세팅함
+        calendar = Calendar(userId = request.user.id, title = data['title'], start = data['start'], end = data['end'], allDay = data['allDay'])
+        # Calendar 데이터를 전달함
+        calendar.save()
+        # 이벤트 저장한 후에 생성된 Calendar PK 아이디를 eventId 속성에 저장해서 JSON 포맷으로 반환함
+        return JsonResponse({ "result" : "success", "eventId" : calendar.id }, safe = False)
+    else:
+        # 로그인이 되어 있지 않기 때문에 로그인 페이지로 이동시킴
+        return redirect('/admin/login/?next=/schedule/')
