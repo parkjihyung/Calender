@@ -267,8 +267,7 @@ Not Found: /favicon.ico
 
 ```shell
 (myfriend) E:\Python_Workspace\myfriend\workspace\mysite>python manage.py makemigrations
-
-python manage.py migrate --fake-initial  
+python manage.py makemigrations schedule
 
 (myfriend) E:\Python_Workspace\myfriend\workspace\mysite>python manage.py migrate
 Operations to perform:

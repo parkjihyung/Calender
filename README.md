@@ -6,38 +6,28 @@
 
 ## 1. Main features
 
-* 사용자 관리자
-  * 사용자 등록, 수정, 삭제
-* 사용자 로그인 / 로그아웃
+* 사용자 로그인 / 로그아웃  (Django Admin Login 사용)
 * 사용자 별 스케쥴 관리
+  * FullCalendar Library 활용하여 스케쥴 등록
   * 스케쥴 등록, 수정, 삭제
+* 사용자 관리자 (Django Admin User 사용)
+  * 사용자 등록, 수정, 삭제
 
 
 
 ## 2. Models
 
-### user
+### Calendar
 
-| Id            | Name          | Type     | Lengh |
-| ------------- | ------------- | -------- | ----- |
-| email         | 이메일        | Text     | 100   |
-| name          | 이름          | Text     | 100   |
-| password      | 비밀번호      | Text     | 100   |
-| register_date | 가입일자      | DateTime |       |
+| Id          | Name            | Type     | Lengh | Default |
+| ----------- | --------------- | -------- | ----- | ----- |
+| userId     | 사용자 아이디   | IntegerField |     | 0 |
+| title       | 스케쥴 제목 | CharField | 100 |  |
+| start  | 시작일시        | DateTime |       |       |
+| end   | 종료일시        | DateTime |       |       |
+| allDay     | 종일 여부       | Boolean  |       | True |
 
-
-
-### schedule
-
-| Id          | Name            | Type     | Lengh |
-| ----------- | --------------- | -------- | ----- |
-| userId     | 사용자 아이디   | Number     |     |
-| title       | 스케쥴 제목     | Text     | 100   |
-| start  | 시작일시        | DateTime |       |
-| end   | 종료일시        | DateTime |       |
-| allDay     | 종일 여부       | Boolean  |       |
-
-
+* userId는 Django admin user Model의 PK(Primery Key)를 저장한다.
 
 
 
